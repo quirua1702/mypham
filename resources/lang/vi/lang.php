@@ -1,0 +1,21 @@
+<?php
+return [
+    'sanpham' => 'Sản phẩm',
+    'trangchu'=> 'Trang chủ',
+    'baiviet'=> 'Tin tức',
+    'tuyendung'=> 'Tuyển dụng',
+    'lienhe'=> 'Liên hệ',
+    'language'=> 'Ngôn ngữ',
+    'xinchao'=> 'Xin chào',
+    'khachhang'=> 'Khách hàng',
+     'timkiem'=> 'Tìm kiếm',
+     'giohang'=> 'Giỏ hàng',
+     'banquyen'=> 'Bản quyền',
+    'boi'=> 'bởi',
+    'sale'=>'SALE GIỮA THÁNG DEAL TO GIÁ NHỎ',      
+    'thuanchay'=> 'Mỹ phẩm 100% thuần chay',
+    'doitra'=> 'Đổi trả trong vòng 3 ngày kể từ khi nhận hàng',
+    'slsp'=> 'Số lượng sản phẩm cực khủng',
+    'xemthem'=> 'Xem thêm',
+    'themvaogiohang'=> 'Thêm vào giỏ hàng',
+];
