@@ -10,11 +10,11 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
 <link rel="stylesheet" href="{{ asset('public/vendor/font-awesome/css/all.min.css') }}" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.3/themes/base/jquery-ui.css">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('public/img/logo2.jpg') }}" />
 <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('public/img/logo2.jpg') }}" />
 @yield('css')
-<link rel="stylesheet" href="{{ asset('public/css/site.css') }}" />
+<!-- <link rel="stylesheet" href="{{ asset('public/css/site.css') }}" /> -->
 </head>
 <body>
     <div class="container">
@@ -131,56 +131,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $('.add_delivery').click(function(){
-                var city = $('.city').val();
-                var province = $('.province').val();
-                var wards = $('.wards').val();
-                var fee_ship = $('.fee_ship').val();
-                var _token = $('input[name="_token"]').val();
-                // alert(city);
-                // alert(province);
-                // alert(wards);
-                // alert(fee_ship);
-                $.ajax({
-                    url: "{{ route('admin.insert_delivery') }}", // Sử dụng route Laravel đúng cách
-                    method: 'POST',
-                    data: {city: city, province: province,_token: _token, wards: wards, fee_ship: fee_ship},
-                    success: function(data){
-                        alert('Thêm phí vận chuyển thành công');
-                    }
-                });
-
-
-            });
-            $('.choose').on('change', function(){
-                var action = $(this).attr('id');
-                var ma_id = $(this).val(); // Lấy giá trị của phần tử chọn hiện tại
-                var _token = $('input[name="_token"]').val();
-                var result = '';
-
-                if(action == 'city'){
-                    result = 'province';
-                } else if(action == 'province'){
-                    result = 'wards';
-                }
-
-                console.log('Action:', action); // Ghi log dữ liệu
-                console.log('ID:', ma_id); // Ghi log dữ liệu
-
-                $.ajax({
-                    url: "{{ route('admin.select_delivery') }}", // Sử dụng route Laravel đúng cách
-                    method: 'POST',
-                    data: {action: action, ma_id: ma_id, _token: _token},
-                    success: function(data){
-                        console.log('Response:', data); // Ghi log dữ liệu
-                        $('#' + result).html(data);
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="https://code.jquery.com/ui/1.13.3/jquery-ui.js"></script>
     @yield('javascript')
 </body>
 </html>

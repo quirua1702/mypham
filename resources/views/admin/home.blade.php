@@ -1,8 +1,36 @@
 @extends('layouts.app')
 @section('content')
 <div class="row">
-  <div class="col-lg-3 col-xs-6">
+  <p class="title_thongke">Thống kê đơn hàng doanh số</p>
+  <form autocomplete="off">
+    @csrf
+    <div class="col-md-2">
+      <p>Từ ngày: <input type="text" id="datepicker" class="form-control"></p>
+      <input type="button" id="btn-dashboard-filter" class="btn btn-primary btn-sm" value="Lọc kết quả">
+    </div>
+    <div class="col-md-2">
+    <p>Đến ngày: <input type="text" id="datepicker2" class="form-control"></p>
+    </div>
+    <!-- <div class="col-md-2">
+      <p>
+        Lọc theo:
+        <select name="" id="" class="dashboard-filter">
+          <option >--Chọn--</option>
+          <option value="7ngay">7 ngày qua</option>
+          <option value="7ngay">tháng trước</option>
+          <option value="7ngay">tháng này</option>
+          <option value="7ngay">365 ngày qua</option>
+        </select>
+      </p>
+    </div> -->
+  </form>
+  <div class="col-md-12">
+    <div id="myfirstchart" style="height: 250px;"></div>
+  </div>
+</div>
 
+<div class="row">
+  <div class="col-lg-3 col-xs-6">
     <div class="small-box bg-aqua">
       <div class="inner">
           <h3>{{$sanpham_count}}</h3>
@@ -16,7 +44,6 @@
   </div>
 
     <div class="col-lg-3 col-xs-6">
-
       <div class="small-box bg-green">
         <div class="inner">
           <h3>{{$donhang_count}}</h3>
@@ -30,7 +57,6 @@
     </div>
 
     <div class="col-lg-3 col-xs-6">
-
       <div class="small-box bg-yellow">
         <div class="inner">
           <h3>{{$nguoidung_count}}</h3>
@@ -42,14 +68,10 @@
           <a href="{{ route('admin.nguoidung') }}" class="small-box-footer">Xem<i class="fa fa-arrow-circle-right"></i></a>
       </div>
     </div>
-
     <div class="col-lg-3 col-xs-6">
-
       <div class="small-box bg-red">
-        
       </div>
   </div>
-
 </div>
 
 

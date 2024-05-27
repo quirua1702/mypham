@@ -16,14 +16,20 @@ class DeliveryController extends Controller
     }
 
     public function insert_delivery(Request $request){
-        $data = $request->all();
-        $fee_ship = new Feeship();
-        $fee_ship->fee_matp = $data['city'];
-        $fee_ship->fee_maqh = $data['province'];
-        $fee_ship->fee_xaid = $data['wards'];
-        $fee_ship->fee_feeship = $data['fee_ship'];
-        $fee_ship->save();
-
+        try {
+            $data = $request->all();
+            $fee_ship = new Feeship();
+            $fee_ship->fee_matp = $data['city'];
+            $fee_ship->fee_maqh = $data['province'];
+            $fee_ship->fee_xaid = $data['wards'];
+            $fee_ship->fee_feeship = $data['fee_ship'];
+            $fee_ship->save();
+            Log::info('Inserted feeship record successfully.');
+            return response()->json(['success' => 'Phí vận chuyển đã được thêm thành công'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error in insert_delivery: ' . $e->getMessage());
+            return response()->json(['error' => 'Có lỗi xảy ra khi thêm phí vận chuyển'], 500);
+        }
     }
     public function select_delivery(Request $request) {
         $data = $request->all();
