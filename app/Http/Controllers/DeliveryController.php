@@ -10,9 +10,49 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Feeship;
 class DeliveryController extends Controller
 {
+    public function update_delivery(Request $request){
+        $data = $request->all();
+        $fee_ship = Feeship::find($data['feeship_id']);
+        $fee_value = rtrim($data['fee_value'],'.');
+        $fee_ship->fee_feeship = $fee_value;
+        $fee_ship->save();
+    }
     public function vanchuyen(Request $request){
         $city = City::orderBy('matp','ASC')->get();
         return view('admin.delivery.add_delivery')->with(compact('city'));
+    }
+    public function select_feeship(){
+        $feeship =Feeship::orderBy('fee_id','DESC')->get();
+        $output = '';
+        $output .= '
+        <div class="table_responsive">
+        <table class="table table-bordered">
+            <thread>
+                <tr>
+                    <th>Tên thành phố</th>
+                    <th>Tên quận huyện</th>
+                    <th>Tên xã phường</th>
+                    <th>Phí ship</th>
+                </tr>
+            </thread>
+            <tbody>
+            ';
+            foreach($feeship as $fee){
+            $output .= '  
+                <tr>
+                    <td>'.$fee->city->name_city.'</td>
+                    <td>'.$fee->province->name_quanhuyen.'</td>
+                    <td>'.$fee->wards->name_xaphuong.'</td>
+                    <td contenteditable data-feeship_id="'.$fee->fee_id.'"class="fee_feeship_edit">'.number_format($fee->fee_feeship,0,',','.').'</td>
+                </tr>
+                ';
+            }
+                $output .= '
+            </tbody>
+        </table>
+        </div>
+            ';
+            echo $output;
     }
 
     public function insert_delivery(Request $request){

@@ -63,7 +63,39 @@
                             <div class="invalid-feedback"><strong>{{ $message }}</strong></div> 
                         @enderror 
                     </div> 
-                     
+
+                    <form>
+                        @csrf
+                        <div class="form-group">
+                            <label for="city">Chọn thành phố</label>
+                            <select name="city" id="city" class="form-control choose city">
+                                <option value="">--Chọn tỉnh thành phố--</option>
+                                @foreach ($city as $ct)
+                                <option value="{{$ct->matp}}">{{$ct->name_city}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="province">Chọn quận huyện</label>
+                            <select name="province" id="province" class="form-control province choose">
+                                <option value="">--Chọn quận huyện--</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="wards">Chọn xã phường</label>
+                            <select name="wards" id="wards" class="form-control wards">
+                                <option value="">--Chọn xã phường--</option>
+                            </select>
+                        </div>
+                        
+                        <br>
+                        <input type="button" value="Tính phí vận chuyển" name="calculate_order" class="btn btn-primary btn-sm d-block w-100 mb-2 calculate_delivery"></input>     
+                    </form>
+
+                   
+
                     <h6 class="mb-3 py-3 border-bottom">Thông tin xuất hóa đơn</h6> 
                     <div class="form-check"> 
                         <input class="form-check-input" type="checkbox" checked id="same-address"> 
@@ -109,24 +141,48 @@
                                 </div> 
                             @endforeach 
                         </div> 
+                        @php
+                            // Lấy tổng tiền sản phẩm từ giỏ hàng, loại bỏ dấu chấm và chuyển thành số
+                            $totalPrice = str_replace('.', '', Cart::priceTotal());
+                            $totalPrice = floatval($totalPrice);
+
+                            // Lấy phí vận chuyển từ session, nếu có
+                            $shippingFee = 0;
+                            if(Session::has('fee')) {
+                                $shippingFee = Session::get('fee');
+                            }
+
+                            // Tính tổng cộng bao gồm phí vận chuyển
+                            $grandTotal = $totalPrice + $shippingFee;
+                        @endphp
                         <ul class="list-unstyled fs-sm pb-2 border-bottom"> 
                             <li class="d-flex justify-content-between align-items-center"> 
-                                <span class="me-2">Tổng tiền sản phẩm:</span><span class="text-end">{{ Cart::priceTotal() }}<small>đ</small></span> 
+                                <span class="me-2">Tổng tiền sản phẩm:</span>
+                                <span class="text-end">{{ number_format($totalPrice, 0, ',', '.') }}<small>đ</small></span> 
                             </li> 
+
+                            @if(Session::get('fee'))
                             <li class="d-flex justify-content-between align-items-center"> 
-                                <span class="me-2">Phí vận chuyển:</span><span class="text-end">—</span> 
+                                <span class="me-2">Phí vận chuyển:</span>
+                                <span class="text-end">{{ number_format(Session::get('fee'), 0, ',', '.') }}<small>đ</small></span> 
                             </li> 
+                            @endif
+
                             <li class="d-flex justify-content-between align-items-center"> 
-                                <span class="me-2">Thuế GTGT:</span><span class="text-end">{{ Cart::tax() }}</span> 
+                                <span class="me-2">Thuế GTGT:</span>
+                                <span class="text-end">0<small>đ</small></span> 
                             </li> 
+
                             <li class="d-flex justify-content-between align-items-center"> 
-                                <span class="me-2">Giảm giá:</span><span class="text-end">—</span> 
+                                <span class="me-2">Giảm giá:</span>
+                                <span class="text-end">—</span> 
                             </li> 
                         </ul> 
-                        <h3 class="fw-normal text-center my-4">{{ Cart::total() }}<small>đ</small></h3> 
+
+                        <h3 class="fw-normal text-center my-4">{{ number_format($grandTotal, 0, ',', '.') }}<small>đ</small></h3>
                         <div class="w-50 ps-2"> 
-                        
-                    </div> 
+                        </div>
+
                     <form action="{{url('/one_payment')}} " method="POST">
                         @csrf
                         <input type="hidden" name="total_onepay" value="{{ Cart::total() }}">
@@ -165,3 +221,52 @@
         </div> 
     </div> 
 @endsection 
+@section('javascript')
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.choose').on('change', function(){
+            var action = $(this).attr('id');
+            var ma_id = $(this).val(); // Lấy giá trị của phần tử chọn hiện tại
+            var _token = $('input[name="_token"]').val();
+            var result = '';
+
+            if(action == 'city'){
+                result = 'province';
+            } else {
+                result = 'wards';
+            }
+            $.ajax({
+                url: "{{ route('user.select_delivery_user') }}", // Sử dụng route Laravel đúng cách
+                method: 'POST',
+                data: {action: action, ma_id: ma_id, _token: _token},
+                success: function(data){
+                    $('#' + result).html(data);
+                }
+            });
+        });
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.calculate_delivery').click(function(){
+            var matp = $('.city').val();
+            var maqh = $('.province').val();
+            var xaid = $('.wards').val();
+            var _token = $('input[name="_token"]').val();
+            if(matp == ' ' && maqh == '' && xaid == ''){
+                alert('Làm ơn hãy tinh phí vận chuyển');
+            }else{
+            $.ajax({
+                url: "{{ route('user.calculate_fee') }}", // Sử dụng route Laravel đúng cách
+                method: 'POST',
+                data: {matp: matp, maqh: maqh, xaid:xaid,_token: _token},
+                success: function(){
+                   location.reload();
+                }
+            });
+            }
+        });
+    });
+</script>
+@endsection
+

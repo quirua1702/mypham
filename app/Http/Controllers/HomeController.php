@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash; 
 use Illuminate\Support\Str; 
 use Exception;
- 
+
 class HomeController extends Controller 
 {
     public function recover_pass(Request $request){

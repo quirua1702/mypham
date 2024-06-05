@@ -166,7 +166,7 @@
         <span class="btn-scroll-top-tooltip text-muted fs-sm me-2">Top</span>
         <i class="btn-scroll-top-icon ci-arrow-up"></i>
     </a>
-    
+    <!-- Scripts -->
     <script src="{{ asset('public/vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('public/vendor/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('public/vendor/tiny-slider/tiny-slider.js') }}"></script>
@@ -180,5 +180,8 @@
     <script src="{{ asset('public/vendor/lightgallery/plugins/video/lg-video.min.js') }}"></script>
     <script src="{{ asset('public/vendor/drift-zoom/Drift.min.js') }}"></script>
     <script src="{{ asset('public/js/theme.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @yield('javascript')
 </body>
 </html>

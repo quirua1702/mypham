@@ -25,7 +25,6 @@ return [
     */
 
     'tax' => 0,// thiết lập % thuế ví dụ 10 thì là 10%
-
     /*
     |--------------------------------------------------------------------------
     | Shoppingcart database settings

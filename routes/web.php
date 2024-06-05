@@ -81,7 +81,8 @@ Route::prefix('khach-hang')->name('user.')->group(function() {
     Route::get('/dat-hang', [KhachHangController::class, 'getDatHang'])->name('dathang'); 
     Route::post('/dat-hang', [KhachHangController::class, 'postDatHang'])->name('dathang'); 
     Route::get('/dat-hang-thanh-cong', [KhachHangController::class, 'getDatHangThanhCong'])->name('dathangthanhcong'); 
-     
+    Route::post('/select_delivery_user', [KhachHangController::class, 'select_delivery_user'])->name('select_delivery_user'); 
+    Route::post('/calculate-fee', [KhachHangController::class, 'calculate_fee'])->name('calculate_fee'); 
     // Xem và cập nhật trạng thái đơn hàng 
     Route::get('/don-hang', [KhachHangController::class, 'getDonHang'])->name('donhang'); 
     Route::get('/don-hang/{id}', [KhachHangController::class, 'getDonHang'])->name('donhang.chitiet'); 
@@ -105,6 +106,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth','manager'])->group(fu
     Route::get('/vanchuyen', [DeliveryController::class, 'vanchuyen'])->name('vanchuyen');
     Route::post('/select_delivery', [DeliveryController::class, 'select_delivery'])->name('select_delivery');
     Route::post('/insert_delivery', [DeliveryController::class, 'insert_delivery'])->name('insert_delivery');
+    Route::post('/select_feeship', [DeliveryController::class, 'select_feeship'])->name('select_feeship');
+    Route::post('/update_delivery', [DeliveryController::class, 'update_delivery'])->name('update_delivery');
+
+    
     // Quản lý Loại sản phẩm 
     Route::get('/loaisanpham', [LoaiSanPhamController::class, 'getDanhSach'])->name('loaisanpham'); 
     Route::get('/loaisanpham/them', [LoaiSanPhamController::class, 'getThem'])->name('loaisanpham.them'); 

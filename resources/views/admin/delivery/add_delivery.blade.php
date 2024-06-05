@@ -42,11 +42,39 @@
     <div id="load_delivery">
 
     </div>
-    
+
 @endsection 
 @section('javascript') 
 <script type="text/javascript">
         $(document).ready(function(){
+            fetch_delivery();
+            function fetch_delivery(){
+                var _token = $('input[name="_token"]').val();
+                $.ajax({
+                    url: "{{ route('admin.select_feeship') }}", // Sử dụng route Laravel đúng cách
+                    method: 'POST',
+                    data:{_token:"{{ csrf_token() }}"},
+                    success:function(data){
+                        $('#load_delivery').html(data);
+                    }
+            });
+            }
+            $(document).on('blur', '.fee_feeship_edit', function(){
+                var feeship_id = $(this).data('feeship_id');
+                var fee_value = $(this).text(); // Lấy giá trị hiện tại của phần tử
+                
+                var _token = $('input[name="_token"]').val();
+                
+                $.ajax({
+                    url: "{{ route('admin.update_delivery') }}", // Sử dụng route Laravel đúng cách
+                    method: 'POST',
+                    data: {feeship_id: feeship_id, fee_value: fee_value, _token: _token},
+                    success: function(data){ 
+                        fetch_delivery(); // Chạy lại CSDL mà không cần load trang 
+                    }
+                });
+            });
+                
             $('.add_delivery').click(function(){
                 var city = $('.city').val();
                 var province = $('.province').val();

@@ -12,11 +12,18 @@ use Illuminate\Support\Facades\Auth;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use App\Models\City;
+use App\Models\Province;
+use App\Models\Wards;
+use App\Models\Feeship;
+use Illuminate\Support\Facades\Log;
 use Exception;
+use Session;
 class KhachHangController extends Controller 
 { 
     public function getHome() 
     { 
+        
         if(Auth::check()) 
         { 
             $nguoidung = NguoiDung::find(Auth::user()->id); 
@@ -203,23 +210,52 @@ class KhachHangController extends Controller
         // *******************        
         
         }
-     
+
+        public function select_delivery_user(Request $request)
+        {
+            $data = $request->all();
+
+
+            if(($data['action'])) {
+                $output = '';
+                if($data['action'] == "city") {
+                    $select_province = Province::where('matp', $data['ma_id'])->orderBy('maqh', 'ASC')->get();
+
+                    $output .= '<option value="">--Chọn quận huyện--</option>';
+                    foreach($select_province as $province) {
+                        $output .= '<option value="' . $province->maqh . '">' . $province->name_quanhuyen . '</option>';
+                    }
+                } else{
+                    
+                    $select_wards = Wards::where('maqh', $data['ma_id'])->orderBy('xaid', 'ASC')->get();
+                    $output .= '<option value="">--Chọn xã phường--</option>';
+                    foreach($select_wards as $ward) {
+                        $output .= '<option value="' . $ward->xaid . '">' . $ward->name_xaphuong . '</option>';
+                    }
+                }
+                echo $output;
+            }
+        }
     public function getDatHang() 
     { 
-        if(Auth::check()) 
-            return view('user.dathang'); 
+        
+        if(Auth::check()){
+            $city = City::orderBy('matp', 'ASC')->get();//lấy city để foreach trong dathang hoạt động 
+            return view('user.dathang')->with('city',$city);
+        } 
         else 
             return redirect()->route('user.dangnhap'); 
     } 
      
     public function postDatHang(Request $request) 
     { 
+        
         // Kiểm tra 
         $this->validate($request, [ 
             'diachigiaohang' => ['required', 'string', 'max:255'], 
             'dienthoaigiaohang' => ['required', 'string', 'max:255'], 
         ]); 
-         
+        
         // Lưu vào đơn hàng 
         $dh = new DonHang(); 
         $dh->nguoidung_id = Auth::user()->id; 
@@ -247,11 +283,27 @@ class KhachHangController extends Controller
         {
             return $e ->getMessage();
         }
+        
+        
+
         return redirect()->route('user.dathangthanhcong');
          
         
     } 
-     
+
+    public function calculate_fee(Request $request){
+        $data = $request->all();
+        if($data['matp']){
+            $feeship = Feeship::where('fee_matp',$data['matp'])
+            ->where('fee_maqh',$data['maqh'])
+            ->where('fee_xaid',$data['xaid'])->get();
+            foreach($feeship as $fee){
+                Session::put('fee',$fee->fee_feeship);
+                Session::save();
+            }
+
+        }
+    }
     public function getDatHangThanhCong() 
     { 
         // Xóa giỏ hàng khi hoàn tất đặt hàng? 
