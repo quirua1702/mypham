@@ -57,45 +57,12 @@
                         @enderror 
                     </div> 
                     <div class="mb-3"> 
-                        <label class="form-label" for="diachigiaohang">Địa chỉ giao hàng</label> 
+                        <label class="form-label" for="diachigiaohang">Địa chỉ giao hàng </label> 
                         <input class="form-control @error('diachigiaohang') is-invalid @enderror" type="text" id="diachigiaohang" name="diachigiaohang" required /> 
                         @error('diachigiaohang') 
                             <div class="invalid-feedback"><strong>{{ $message }}</strong></div> 
                         @enderror 
                     </div> 
-
-                    <form>
-                        @csrf
-                        <div class="form-group">
-                            <label for="city">Chọn thành phố</label>
-                            <select name="city" id="city" class="form-control choose city">
-                                <option value="">--Chọn tỉnh thành phố--</option>
-                                @foreach ($city as $ct)
-                                <option value="{{$ct->matp}}">{{$ct->name_city}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <label for="province">Chọn quận huyện</label>
-                            <select name="province" id="province" class="form-control province choose">
-                                <option value="">--Chọn quận huyện--</option>
-                            </select>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <label for="wards">Chọn xã phường</label>
-                            <select name="wards" id="wards" class="form-control wards">
-                                <option value="">--Chọn xã phường--</option>
-                            </select>
-                        </div>
-                        
-                        <br>
-                        <input type="button" value="Tính phí vận chuyển" name="calculate_order" class="btn btn-primary btn-sm d-block w-100 mb-2 calculate_delivery"></input>     
-                    </form>
-
-                   
-
                     <h6 class="mb-3 py-3 border-bottom">Thông tin xuất hóa đơn</h6> 
                     <div class="form-check"> 
                         <input class="form-check-input" type="checkbox" checked id="same-address"> 
@@ -123,6 +90,38 @@
             </section> 
             <aside class="col-lg-4 pt-4 pt-lg-0 ps-xl-5"> 
                 <div class="bg-white rounded-3 shadow-lg p-4 ms-lg-auto"> 
+                <form>
+                        @csrf
+                        <div class="form-group">
+                            <label for="city">Chọn thành phố</label>
+                            <select name="city" id="city" class="form-control choose city">
+                                <option value="">--Chọn tỉnh thành phố--</option>
+                                @foreach ($city as $ct)
+                                <option value="{{$ct->matp}}">{{$ct->name_city}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="province">Chọn quận huyện</label>
+                            <select name="province" id="province" class="form-control province choose">
+                                <option value="">--Chọn quận huyện--</option>
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="wards">Chọn xã phường</label>
+                            <select name="wards" id="wards" class="form-control wards">
+                                <option value="">--Chọn xã phường--</option>
+                            </select>
+                        </div>
+                        
+                        <br>
+                        <input type="button" value="Tính phí vận chuyển" name="calculate_order" class="btn btn-info calculate_delivery"></input>     
+                    </form>
+                    <br>
+                    <br>
+                    <hr>
                     <div class="py-2 px-xl-2"> 
                         <div class="widget mb-3"> 
                             <h2 class="widget-title text-center">Sản phẩm đã đặt</h2> 
@@ -185,12 +184,12 @@
 
                     <form action="{{url('/one_payment')}} " method="POST">
                         @csrf
-                        <input type="hidden" name="total_onepay" value="{{ Cart::total() }}">
+                        <input type="hidden" name="total_onepay" value="{{ number_format($grandTotal, 0, ',', '.') }}">
                         <button type="submit" class="btn btn-primary btn-sm d-block w-100 mb-2">Thanh toán ONEPAY</button>
                     </form>
                     <form action="{{url('/momo_payment')}} " method="POST">
                         @csrf
-                        <input type="hidden" name="payUrl" value="{{ Cart::total() }}">
+                        <input type="hidden" name="payUrl" value="{{ number_format($grandTotal, 0, ',', '.') }}">
                         <button type="submit" class="btn btn-primary btn-sm d-block w-100 mb-2">Thanh toán MOMO</button>
                     </form>
                     

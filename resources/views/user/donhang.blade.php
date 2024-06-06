@@ -24,6 +24,7 @@
 									<th>Tên người đặt</th>
 									<th>Tình trạng </th>
 									<th>Điện thoại đặt hàng</th>
+									<th>Địa chỉ giao hàng</th>
 									<th>Ngày đặt</th>
 								</tr>
 							</thead>
@@ -32,6 +33,7 @@
 									<td class="py-3"><a class="nav-link-style fw-medium fs-sm" href="#">{{ $item->NguoiDung->name }}</a></td>
 									<td class="py-3"><span class="badge bg-info m-0">{{ $item->TinhTrang->tinhtrang }}</span></td>
 									<td class="py-3"><span class="badge bg-info m-0">{{ $item->dienthoaigiaohang }}</span></td>
+									<td class="py-3"><span class="badge bg-info m-0">{{ $item->diachigiaohang }}</span></td>
 									<td class="py-3">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $item->created_at)->format('d/m/Y H:i:s') }}</td>
 								</tr>
 								
