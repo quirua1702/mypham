@@ -16,8 +16,6 @@ return new class extends Migration
             $table->foreignId('baiviet_id')->constrained('baiviet'); 
             $table->foreignId('nguoidung_id')->constrained('nguoidung'); 
             $table->text('noidungbinhluan'); 
-            $table->unsignedTinyInteger('kiemduyet')->default(0); 
-            $table->unsignedTinyInteger('kichhoat')->default(1); 
             $table->timestamps(); 
             $table->engine = 'InnoDB'; 
         }); 
